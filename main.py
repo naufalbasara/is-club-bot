@@ -1,17 +1,14 @@
-from bs4 import BeautifulSoup
 import discord
 from dotenv import load_dotenv
 from io import BytesIO
 import os
 import pickledb
 from PIL import Image, ImageDraw, ImageFont
-import random
 import requests
 import time
-from webserver import keep_alive
-
-### Import Services
 from services.stackoverflow import get_stackoverflow_result
+from services.imgur import get_image
+from api.webserver import keep_alive
 
 db = pickledb.load('isclub.db', False)
 db.set("IS CLUB", {
@@ -131,7 +128,7 @@ class ISClubClient(discord.Client):
 
         if message.content.startswith('>img'):
             msg = ' '.join(message.content.split()[1:])
-            image_url = await self.get_image(msg)
+            image_url = await get_image(msg)
             if not image_url:
                 await message.channel.send('no image found, try again.')
                 return
@@ -155,6 +152,9 @@ class ISClubClient(discord.Client):
 > 
 > `>img [search]`
 > Get random images based on user input
+> 
+> `so [question]` (Contributor: Atra)
+> Get link to Stack Overflow from user related questions
 """
             await message.channel.send(content)
 
@@ -220,24 +220,6 @@ class ISClubClient(discord.Client):
             content = "can't connect with the endpoint."
 
         return content
-    
-    async def get_image(self, user_input):
-        """
-        Scraping the website om IMGUR using beautifulsoup to get random image according to certain user input   
-        """
-        time.sleep(2)
-        try:
-            data = requests.get(f'https://imgur.com/search?q={user_input}', headers={
-                    'User-Agent': 'Chrome/115.0.0.0',
-                }).content
-            soup = BeautifulSoup(data, 'html.parser')
-            images = soup.find_all(class_='post')
-            img = images[random.randint(0, len(images)-1)].find('img')
-
-        except:
-            return False
-        
-        return 'https:' + img['src']
     
     def generate_img(self, username):
         width = 512

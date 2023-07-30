@@ -15,10 +15,13 @@ Bot will trying to fetch for random jokes through an API
 3. Fetch Keyword Inputted by User for Images `>img [keyword]`  
 Bot will trying to search for random image according to keyword that user has given
 
-4. Commands Information `>info`  
+4. Fetch Keyword Inputted by User for Images `>so [keyword]` (Contributor: Atra)  
+Bot will trying to search for user related questions
+
+5. Commands Information `>info`  
 Bot will trying to send information about bot commands
 
-5. Commands Information (Admin Only)`>admin-privilege-1991`  
+6. Commands Information (Admin Only)`>admin-privilege-1991`  
 Bot will trying to send information about bot commands that only member with admin role can accessed
 
 ## Contributing

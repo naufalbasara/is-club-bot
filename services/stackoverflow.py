@@ -1,7 +1,5 @@
 import requests
-
-STACK_OVERFLOW_API_KEY = 'eMtl9m*pSEowWdBlqrdEeg(('
-
+import os
 
 def get_stackoverflow_result(query):
     base_url = 'https://api.stackexchange.com/2.3/search'
@@ -10,7 +8,7 @@ def get_stackoverflow_result(query):
         'sort': 'relevance',
         'intitle': query,
         'site': 'stackoverflow',
-        'key': STACK_OVERFLOW_API_KEY
+        'key': os.getenv('STACK_OVERFLOW_API_KEY')
     }
 
     response = requests.get(base_url, params=params)
