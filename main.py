@@ -10,6 +10,9 @@ import requests
 import time
 from webserver import keep_alive
 
+### Import Services
+from services.stackoverflow import get_stackoverflow_result
+
 db = pickledb.load('isclub.db', False)
 db.set("IS CLUB", {
                 'channel_target': 1131453777313009684,
@@ -179,6 +182,26 @@ class ISClubClient(discord.Client):
 """
 
             await message.channel.send(content)
+            
+        if message.content.startswith('>so'):
+            query = message.content[len('>so '):].strip()
+            response = get_stackoverflow_result(query)
+            
+            if 'items' in response:
+                results = response['items'][:5]
+                if results:
+                    reply = 'Here are some relevant questions from Stack Overflow:\n'
+                    for i, result in enumerate(results):
+                        title = result['title']
+                        link = result['link']
+                        reply += f'{i}. [{title}]({link})\n'
+                else:
+                    reply = 'Sorry, no relevant questions found. Try a different query.'
+            else:
+                reply = 'Sorry, there was an error fetching results. Please try again later.'
+            
+            await message.channel.send(reply)
+        
 
     async def get_jokes(self):
         """
